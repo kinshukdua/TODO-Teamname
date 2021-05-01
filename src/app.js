@@ -159,7 +159,7 @@ App = {
           $newVaccineTemplate.find('.tx-hash').html(tx_hash);
 
           var qr = new QRious({
-            value: 'https://github.com/neocotic/qrious'
+            value: tx_hash
           });
 
           $newVaccineTemplate.attr('onClick', "App.generatePDF('"+name+"','"+aadhar+"','"+qr.toDataURL() +"')");
