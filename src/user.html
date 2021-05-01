@@ -5,7 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@0.20.6/dist/web3.min.js" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     <title>Vaccine Blockchain</title>
 
     <!-- Bootstrap -->
@@ -83,82 +82,22 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav">
-          <li class="nav-item active">
+          <li class="nav-item">
             <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="vaccine.html">Vaccines</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item active">
             <a class="nav-link" href="user.html">Users</a>
           </li>
         </ul>
       </div>
     </nav>
-    <div class="container-fluid">
-      <div class="row">
-        <main role="main" class="d-flex justify-content-center">
-          <div id="loader" class="text-center">
-            <p class="text-center">Loading...</p>
-          </div>
-          <div id="content">
-            <form style="display: none;">
-              <div class="form-group">
-                <label for="locationTemplate"><strong>Select location</strong></label>
-                <select class="form-control" id="locationDropdownList" required>
-                  <option class="selectLocationTemplate" disabled>Location goes here...</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="vaccineTemplate"><strong>Select vaccine</strong></label>
-                <select id="vaccineDropdownList" class="form-control" id="sel1" required>
-                  <option class="selectVaccineTemplate" disabled>Vaccine goes here...</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="temperature"><strong>Temperature</strong></label>
-                <input class="form-control" id="temp" placeholder="e.g. 2°C" required>
-              </div>
-  
-                <label style="display: none" for="temperature"><strong>Temperature</strong></label>
-                <input style="display: none"class="form-control" id="temp" placeholder="e.g. 2°C" required>
-
-              <div class="form-group">
-                <label for="nme"><strong>Name</strong></label>
-                <input class="form-control" id="nme" placeholder="Enter Name" required>
-              </div>
-              <div class="form-group">
-                <label for="add"><strong>Aadhaar Card Number</strong></label>
-                <input class="form-control" id="add" placeholder="Enter Aadhaar Card Number" required>
-              </div> 
-              <button type="submit" class="btn btn-primary" onclick="App.receiveVaccine()">Receive</button>  
-            </form>
-            <span id ="fin-hash"></span>
-          </div>
-        </main>
-      </div>
-      <div class="row">
-        <main role="main" class="d-flex justify-content-center">
-            <div id="vaccineList" class="card-columns">
-              <div class="vaccineTemplate card" style="width: 22rem; display: none; background-color:rgb(63, 62, 62) ;">
-                <div class="card-body">
-                  <h3 class="name card-title">Vaccine name goes here...</h3>
-                </div>
-                <ul class="list-group list-group-mine list-group-flush">
-                  <li class="list-group-item d-flex justify-content-between align-items-center">Barcode<span class="barcode badge badge-primary badge-pill">Barcode goes here...</span></li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center">Manufacturer<span class="manufacturer badge badge-primary badge-pill">Manufacturer goes here...</span></li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center">Location<span class="location badge badge-primary badge-pill">Location goes here...</span></li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center">Temperature<span class="temp badge badge-primary badge-pill">Temperature goes here...</span></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </main>
-      </div>
-      <div class="row">
+    <div class="row">
+        <span id ="fin-hash"></span>
         <main role="main" class="d-flex justify-content-center">
             <div id="certList" class="card-columns">
-            
               <div class="certTemplate card" style="width: 22rem; display: none; background-color:rgb(63, 62, 62) ">
                 <div class="card-body">
                   <h3 class=" card-title">Vaccination Cert</h3>
@@ -167,7 +106,6 @@
                   <li class="list-group-item d-flex justify-content-between align-items-center">Name<span class="name2 badge badge-primary badge-pill">Barcode goes here...</span></li>
                   <li class="list-group-item d-flex justify-content-between align-items-center">Aadhar<span class="aadhar badge badge-primary badge-pill">Manufacturer goes here...</span></li>
                   <li class="list-group-item d-flex justify-content-between align-items-center">Timestamp<span class="timestamp badge badge-primary badge-pill">Location goes here...</span></li>
-                  
                 </ul>
               </div>
             </div>
@@ -175,19 +113,15 @@
         </main>
       </div>
     </div>
-
     
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="vendor/truffle-contract/dist/truffle-contract.js"></script>
-                <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
     <script src="https://unpkg.com/@pdf-lib/fontkit@0.0.4"></script>
-
-
-    <script src="filesaver.js"></script>
-    <script src="cert.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     <script src="app.js"></script>
   </body>
 </html>

@@ -1,4 +1,4 @@
-
+const { PDFDocument, rgb, degrees } = PDFLib;
 App = {
     loading: false,
     contracts: {},
@@ -46,8 +46,7 @@ App = {
     loadAccount: async () => {
         App.account = web3.eth.accounts[0];
         console.log(App.account);
-        var someVarName = localStorage.getItem("someVarKey");
-        document.getElementById("fin-hash").innerHTML = someVarName;
+        document.getElementById("fin-hash").innerHTML = localStorage.getItem("hash");
     },
 
     loadVaccineDistribution: async() => {
@@ -121,6 +120,7 @@ App = {
             $newVaccineTemplate.find('.manufacturer').html(vaccineManufacturer);
             $newVaccineTemplate.find('.location').html(vaccineLocation);
             $newVaccineTemplate.find('.temp').html(vaccineTemp + "°C");
+            $newVaccineTemplate.id = i;
 
             if(vaccineTemp < 2 || vaccineTemp > 8) {
               $newVaccineTemplate.find('.temp').addClass("badge-danger");
@@ -147,11 +147,22 @@ App = {
           const name = cert[0];
           const aadhar = cert[1];
           const timestamp = cert[2];
+          const tx_hash = cert[5];
+
+
           // Create the html for the vaccine
+
           const $newVaccineTemplate = $vaccineTemplate.clone();
           $newVaccineTemplate.find('.name2').html(name);
           $newVaccineTemplate.find('.aadhar').html(aadhar);
           $newVaccineTemplate.find('.timestamp').html(timestamp);
+          $newVaccineTemplate.find('.tx-hash').html(tx_hash);
+
+          var qr = new QRious({
+            value: 'https://github.com/neocotic/qrious'
+          });
+
+          $newVaccineTemplate.attr('onClick', "App.generatePDF('"+name+"','"+aadhar+"','"+qr.toDataURL() +"')");
 
           $('#certList').append($newVaccineTemplate);
 
@@ -235,25 +246,31 @@ App = {
       const name = $('#nme').val();
       const aadhar = $('#add').val();
       App.setLoading(true);
-      var certId =  await App.vaccineDistr.certCount();
-      certId = parseInt(certId)+1;
+      web3.eth.defaultAccount = web3.eth.accounts[0];
+  
       const ts = new Date().getTime().toString();
-      web3.eth.defaultAccount = web3.eth.accounts[0]
-      console.log(await App.vaccineDistr.vaccineCount.call());
       try {
-        const h = await App.vaccineDistr.receiveVaccine(certId, name, aadhar,ts,"Covishield");
+        var certId =  await App.vaccineDistr.certCount();
+        certId = parseInt(certId)+1;
+        var h = await App.vaccineDistr.receiveVaccine.sendTransaction(certId, name, aadhar,ts,"Covishield");
+        await App.vaccineDistr.addHash.sendTransaction(certId,h);
+        
         localStorage.setItem("hash", h);
+       
+        
 
     }
     catch(err)
     {
       console.log(err);
-      setTimeout(() => {  console.log("World!"); }, 10000);
-      
     }
       window.location.reload();
-    },
 
+    },
+    async getDetails(hash)
+    {
+      return;
+    },
     setLoading: (boolean) => {
         App.loading = boolean
         const loader = $('#loader')
@@ -265,7 +282,62 @@ App = {
           loader.hide()
           content.show()
         }
-    }
+
+        
+
+    },
+     generatePDF: async (name,aadhar,qrURL) => {
+      
+      
+      const existingPdfBytes = await fetch("cert.pdf").then((res) =>
+        res.arrayBuffer()
+      );
+  
+      // Load a PDFDocument from the existing PDF bytes
+      const pdfDoc = await PDFDocument.load(existingPdfBytes);
+      pdfDoc.registerFontkit(fontkit);
+  
+      
+    //get font
+    const fontBytes = await fetch("Sanchez-Regular.ttf").then((res) =>
+    res.arrayBuffer()
+  );
+    // Embed our custom font in the document
+    const SanChezFont  = await pdfDoc.embedFont(fontBytes);
+     // Get the first page of the document
+     const pages = pdfDoc.getPages();
+     const firstPage = pages[0];
+   
+     // Draw a string of text diagonally across the first page
+     firstPage.drawText(name, {
+       x: 300,
+       y: 270,
+       size: 46,
+       font: SanChezFont ,
+       color: rgb(0, 0, 0),
+     });
+     firstPage.drawText(aadhar, {
+      x: 300,
+      y: 200,
+      size: 36,
+      font: SanChezFont ,
+      color: rgb(0, 0, 0),
+    });
+     const pngUrl = qrURL
+     const pngImageBytes = await fetch(pngUrl).then((res) => res.arrayBuffer())
+     const pngImage = await pdfDoc.embedPng(pngImageBytes)
+     const pngDims = pngImage.scale(1.3)
+     firstPage.drawImage(pngImage, {
+      x: 110,
+      y: 180,
+      width: pngDims.width,
+      height: pngDims.height,
+    })
+    // Serialize the PDFDocument to bytes (a Uint8Array)
+    const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
+    saveAs(pdfDataUri,"newcertificate.pdf")
+  },
+  
 }
 
 $(() => {
