@@ -1,0 +1,30 @@
+{
+    "name": "todo-teamname-vaccination-blockchain",
+    "version": "1.0.0",
+    "description": "Covid 19 Vaccination Network for Devsoc 2021.",
+    "main": "truffle-config.js",
+    "directories": {
+        "test": "test"
+    },
+    "scripts": {
+        "dev": "lite-server",
+        "test": "echo \"Error: no test specified\" && sexit 1"
+    },
+    "author": "Kinshuk Dua, Vaishnavi V",
+    "license": "Closed Source",
+    "devDependencies": {
+        "bootstrap": "^4.4.1",
+        "chai": "^4.1.2",
+        "chai-as-promised": "^7.1.1",
+        "chai-bignumber": "^2.0.2",
+        "diff": ">=3.5.0",
+        "lite-server": "^2.3.0",
+        "nodemon": "^1.17.3",
+        "truffle": "5.0.2",
+        "truffle-contract": "3.0.6"
+    },
+    "dependencies": {
+        "fs": "*",
+        "web3": "^0.20.6"
+    }
+}
