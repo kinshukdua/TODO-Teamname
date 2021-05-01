@@ -88,6 +88,7 @@ App = {
         await App.renderVaccineGrid();
         await App.renderVaccineList();
         await App.renderLocationList();
+        await App.renderCertGrid();
 
         // Update loading state
         App.setLoading(false);
@@ -133,6 +134,31 @@ App = {
             $newVaccineTemplate.show();
         }
     },
+    
+    renderCertGrid: async () => {
+      // Load the total vaccine count from the blockchain
+      const vaccineCount = await App.vaccineDistr.certCount();
+      const $vaccineTemplate = $('.certTemplate');
+
+      // Render out each vaccine with a new vaccine template
+      for(var i = 1; i <= vaccineCount; i++) {
+          // Fetch the task data from the blockchain
+          const cert = await App.vaccineDistr.certs(i);
+          const name = cert[0];
+          const aadhar = cert[1];
+          const timestamp = cert[2];
+          // Create the html for the vaccine
+          const $newVaccineTemplate = $vaccineTemplate.clone();
+          $newVaccineTemplate.find('.name2').html(name);
+          $newVaccineTemplate.find('.aadhar').html(aadhar);
+          $newVaccineTemplate.find('.timestamp').html(timestamp);
+
+          $('#certList').append($newVaccineTemplate);
+
+          // Show the vaccine
+          $newVaccineTemplate.show();
+      }
+  },
 
     renderVaccineList: async () => {
         // Load the total vaccine count from the blockchain
@@ -157,6 +183,30 @@ App = {
           $newVaccineTemplate.prop('disabled', false);
         }
     },
+    /*
+    renderCertList: async () => {
+      // Load the total vaccine count from the blockchain
+      const vaccineCount = await App.vaccineDistr.certCount();
+      const $vaccineTemplate = $('.selectVaccineTemplate');
+
+      // Render out each vaccine with a new select vaccine template
+      for(var i = 1; i <= vaccineCount; i++) {
+        // Fetch the task data from the blockchain
+        const vaccine = await App.vaccineDistr.vaccines(i);
+        const vaccineBarcode = vaccine[0];
+        const vaccineName = vaccine[1];
+
+        // Create the html for the vaccine
+        const $newVaccineTemplate = $vaccineTemplate.clone();
+        $newVaccineTemplate.prop('value', i);
+        $newVaccineTemplate.html(vaccineName + ": " + vaccineBarcode);
+
+        $('#vaccineDropdownList').append($newVaccineTemplate);
+
+        // Show the vaccine
+        $newVaccineTemplate.prop('disabled', false);
+      }
+  },*/
 
     renderLocationList: async () => {
       // Load the total location count from the blockchain
@@ -182,20 +232,23 @@ App = {
   },
 
     receiveVaccine: async () => {
+      const name = $('#nme').val();
+      const aadhar = $('#add').val();
       App.setLoading(true);
-      const vaccineId = $('#vaccineDropdownList').val();
-      const vaccineLocation = $('#locationDropdownList').children("option:selected").text();
-      const vaccineTemp = $('#temp').val();
+      var certId =  await App.vaccineDistr.certCount();
+      certId = parseInt(certId)+1;
+      const ts = new Date().getTime().toString();
       web3.eth.defaultAccount = web3.eth.accounts[0]
       console.log(await App.vaccineDistr.vaccineCount.call());
       try {
-        const h = await App.vaccineDistr.receiveVaccine(vaccineId, vaccineLocation, vaccineTemp);
+        const h = await App.vaccineDistr.receiveVaccine(certId, name, aadhar,ts,"Covishield");
         localStorage.setItem("hash", h);
 
     }
     catch(err)
     {
       console.log(err);
+      setTimeout(() => {  console.log("World!"); }, 10000);
       
     }
       window.location.reload();

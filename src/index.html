@@ -83,6 +83,14 @@
                 <label for="temperature">Temperature</label>
                 <input class="form-control" id="temp" placeholder="e.g. 2°C" required>
               </div>
+              <div class="form-group">
+                <label for="nme">Name</label>
+                <input class="form-control" id="nme" placeholder="Enter Name" required>
+              </div>
+              <div class="form-group">
+                <label for="add">Aadhaar Card Number</label>
+                <input class="form-control" id="add" placeholder="Enter Aadhaar Card Number" required>
+              </div> 
               <button type="submit" class="btn btn-primary" onclick="App.receiveVaccine()">Receive</button>  
             </form>
             <span id ="fin-hash"></span>
@@ -101,6 +109,23 @@
                   <li class="list-group-item d-flex justify-content-between align-items-center">Manufacturer<span class="manufacturer badge badge-primary badge-pill">Manufacturer goes here...</span></li>
                   <li class="list-group-item d-flex justify-content-between align-items-center">Location<span class="location badge badge-primary badge-pill">Location goes here...</span></li>
                   <li class="list-group-item d-flex justify-content-between align-items-center">Temperature<span class="temp badge badge-primary badge-pill">Temperature goes here...</span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+      <div class="row">
+        <main role="main" class="d-flex justify-content-center">
+            <div id="certList" class="card-columns">
+              <div class="certTemplate card" style="width: 22rem; display: none;">
+                <div class="card-body">
+                  <h3 class=" card-title">Vaccination Cert</h3>
+                </div>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item d-flex justify-content-between align-items-center">Name<span class="name2 badge badge-primary badge-pill">Barcode goes here...</span></li>
+                  <li class="list-group-item d-flex justify-content-between align-items-center">Aadhar<span class="aadhar badge badge-primary badge-pill">Manufacturer goes here...</span></li>
+                  <li class="list-group-item d-flex justify-content-between align-items-center">Timestamp<span class="timestamp badge badge-primary badge-pill">Location goes here...</span></li>
                 </ul>
               </div>
             </div>

@@ -2,7 +2,7 @@ pragma solidity >=0.4.21 <0.7.0;
 
 contract VaccineDistribution {
     uint public vaccineCount = 0;
-    uint public vaccinatedPeople = 0;
+    uint public certCount = 0;
 
     struct Vaccine {
         string barcode;
@@ -11,8 +11,22 @@ contract VaccineDistribution {
         string locale;
         int temp;
     }
+    struct Cert {
+        string name;
+        string aadhar;
+        string timestamp;
+        string barcode;
+        string vacname;
+    }
 
     mapping(uint => Vaccine) public vaccines;
+    mapping(uint => Cert) public certs;
+
+    event CertCreated (
+        string name,
+        string aadhar,
+        string timestamp
+    );
 
     event VaccineCreated(
         string barcode,
@@ -34,6 +48,8 @@ contract VaccineDistribution {
         createVaccine("SFFFQJ93", "Covishield", "Serum Institute Of India", "Delhi, WA", -10);
         createVaccine("JDDFD334", "Covaxin", "Bharat Biotech", "Chennai, WA", 0);
         createVaccine("DFSFE238", "Sputnik", "Panacea Biotec", "Hyderabad, WA", 5);
+        receiveVaccine(1, "Kinshuk", "12345678", "12122134241", "Covishield");
+        receiveVaccine(2, "Test", "123232141342", "9999999999", "Covaxin");
     }
 
     function createVaccine(string memory _barcode, string memory _name, string memory _manufacturer,
@@ -43,13 +59,15 @@ contract VaccineDistribution {
         emit VaccineCreated(_barcode, _name, _manufacturer, _locale, _temp);
     }
 
-    function receiveVaccine(uint _id, string memory _vaccineLocation, int _temp) public {
-        Vaccine memory _vaccine = vaccines[_id];
-        _vaccine.temp = _temp;
-        _vaccine.locale = _vaccineLocation;
-        vaccines[_id] = _vaccine;
-        vaccinatedPeople++;
-        emit VaccineReceived(_vaccine.barcode, _vaccine.name, _vaccineLocation, _temp);
+    function receiveVaccine(uint _id, string memory name, string memory aadhar, string memory timestamp, string memory vacname) public {
+        Cert memory _cert;
+        _cert.name = name;
+        _cert.aadhar = aadhar;
+        _cert.timestamp = timestamp;
+        _cert.vacname = vacname;
+        certCount++;
+        certs[_id] = _cert;
+        emit CertCreated(_cert.name, _cert.aadhar, _cert.timestamp);
     }
     function() external payable {}
 }
